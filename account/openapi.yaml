@@ -1,0 +1,230 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Account API
+    version: 0.0.1
+paths:
+    account/login_with_code:
+        post:
+            tags:
+                - Account
+            operationId: Account_LoginWithCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.LoginWithCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.LoginWithCodeRsponse'
+    account/login_with_password:
+        post:
+            tags:
+                - Account
+            operationId: Account_LoginWithPassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.LoginWithPasswordRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.LoginWithPasswordResponse'
+    account/register:
+        post:
+            tags:
+                - Account
+            operationId: Account_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.RegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.RegisterResponse'
+    account/send_email_code:
+        post:
+            tags:
+                - Account
+            operationId: Account_SendEmailCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.SendEmailCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.SendEmailCodeResponse'
+    account/test_email:
+        post:
+            tags:
+                - Account
+            operationId: Account_TestEmail
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.TestEmailRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.TestEmailResponse'
+    account/test_email_code:
+        post:
+            tags:
+                - Account
+            operationId: Account_TestEmailCode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.TestEmailCodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.TestEmailCodeResponse'
+    account/test_username:
+        post:
+            tags:
+                - Account
+            operationId: Account_TestUsername
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/account.v1.TestUsernameRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/account.v1.TestUsernameResponse'
+components:
+    schemas:
+        account.v1.LoginWithCodeRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                emailCode:
+                    type: string
+        account.v1.LoginWithCodeRsponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                errorMessage:
+                    type: string
+                token:
+                    type: string
+        account.v1.LoginWithPasswordRequest:
+            type: object
+            properties:
+                usernameOrEmail:
+                    type: string
+                password:
+                    type: string
+        account.v1.LoginWithPasswordResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                errorMessage:
+                    type: string
+                token:
+                    type: string
+        account.v1.RegisterRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                email:
+                    type: string
+                emailCode:
+                    type: string
+        account.v1.RegisterResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+                errorMessage:
+                    type: string
+        account.v1.SendEmailCodeRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+        account.v1.SendEmailCodeResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        account.v1.TestEmailCodeRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+                emailCode:
+                    type: string
+        account.v1.TestEmailCodeResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        account.v1.TestEmailRequest:
+            type: object
+            properties:
+                email:
+                    type: string
+        account.v1.TestEmailResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+        account.v1.TestUsernameRequest:
+            type: object
+            properties:
+                username:
+                    type: string
+        account.v1.TestUsernameResponse:
+            type: object
+            properties:
+                success:
+                    type: boolean
+tags:
+    - name: Account
