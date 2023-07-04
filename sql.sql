@@ -1,0 +1,46 @@
+#user表结构
+CREATE TABLE user (
+  id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(64) NOT NULL,
+  password VARCHAR(128) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  is_seller BOOLEAN DEFAULT FALSE,
+  PRIMARY KEY (id)
+);
+
+#商家表结构
+CREATE TABLE merchants (
+  MerchantID INT NOT NULL AUTO_INCREMENT,
+  UserID INT NOT NULL,
+  MerchantName VARCHAR(255) NOT NULL,
+  ContactNumber VARCHAR(20) NOT NULL,
+  Address VARCHAR(255) NOT NULL,
+  CreatedTime TIMESTAMP NOT NULL,
+  UpdatedTime TIMESTAMP NOT NULL,
+  PRIMARY KEY (MerchantID),
+  FOREIGN KEY (UserID) REFERENCES user(id)
+);
+
+#商铺信息表
+CREATE TABLE shops (
+  ShopID INT NOT NULL,
+  ShopName VARCHAR(255) NOT NULL,
+  MerchantID INT NOT NULL,
+  CreatedTime TIMESTAMP NOT NULL,
+  UpdatedTime TIMESTAMP NOT NULL,
+  PRIMARY KEY (ShopID),
+  FOREIGN KEY (MerchantID) REFERENCES merchants(MerchantID)
+);
+
+#商品信息表
+CREATE TABLE Product (
+  ProductID INT NOT NULL AUTO_INCREMENT,
+  ShopID INT NOT NULL ,
+  ProductName VARCHAR(255) NOT NULL,
+  Description TEXT NOT NULL,
+  Price DECIMAL(10, 2) NOT NULL,
+  CreatedTime TIMESTAMP NOT NULL,
+  UpdatedTime TIMESTAMP NOT NULL,
+  PRIMARY KEY (ProductID),
+  FOREIGN KEY (ShopID) REFERENCES shops(ShopID)
+);
