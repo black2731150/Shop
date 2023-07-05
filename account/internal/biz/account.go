@@ -23,6 +23,7 @@ type UserRepo interface {
 	FetchByUsername(ctx context.Context, username string) (user *User, err error)
 	FetchByEmail(ctx context.Context, email string) (user *User, err error)
 	Save(ctx context.Context, user *User) (id int64, err error)
+	Delete(ctx context.Context, user *User) (err error)
 }
 
 type AccountUseCase struct {
@@ -220,4 +221,22 @@ func (a *AccountUseCase) LoginWithCode(ctx context.Context, email, emial_code st
 
 	return token, nil
 
+}
+
+func (a *AccountUseCase) DeleteAccounter(ctx context.Context, email string) (err error) {
+	if email == "" {
+		return fmt.Errorf("删除用户失败,email不能为空")
+	}
+
+	user, err := a.userRepo.FetchByEmail(ctx, email)
+	if err != nil {
+		return fmt.Errorf("查找用户失败: %v", err)
+	}
+
+	err = a.userRepo.Delete(ctx, user)
+	if err != nil {
+		return fmt.Errorf("删除用户失败: %v", err)
+	}
+
+	return nil
 }

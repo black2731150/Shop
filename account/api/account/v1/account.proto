@@ -55,6 +55,13 @@ service Account {
             body: "*"
         };
     }
+
+    rpc DeleteAccounter(DeleteAccounterRequest) returns (DeleteAccounterResponse){
+         option (google.api.http)={
+            post: "account/delete_accounter"
+            body: "*"
+        };
+    }
 }
 
 service Authentication{
@@ -135,5 +142,14 @@ message TestTokenRequest {
 message TestTokenResponse {
     bool success=1;
     int64 userID=2;
+}
+
+message DeleteAccounterRequest {
+    string email =1;
+}
+
+message DeleteAccounterResponse{
+    bool success=1;
+    string error_message = 2;
 }
 

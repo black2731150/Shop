@@ -47,3 +47,12 @@ func (u *userRepo) Save(ctx context.Context, user *biz.User) (id int64, err erro
 	}
 	return user.ID, nil
 }
+
+func (u *userRepo) Delete(ctx context.Context, user *biz.User) (err error) {
+	result := u.table.WithContext(ctx).Delete(user)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
