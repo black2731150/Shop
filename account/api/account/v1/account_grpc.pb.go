@@ -26,6 +26,7 @@ const (
 	Account_TestUsername_FullMethodName      = "/account.v1.Account/TestUsername"
 	Account_LoginWithPassword_FullMethodName = "/account.v1.Account/LoginWithPassword"
 	Account_LoginWithCode_FullMethodName     = "/account.v1.Account/LoginWithCode"
+	Account_DeleteAccounter_FullMethodName   = "/account.v1.Account/DeleteAccounter"
 )
 
 // AccountClient is the client API for Account service.
@@ -39,6 +40,7 @@ type AccountClient interface {
 	TestUsername(ctx context.Context, in *TestUsernameRequest, opts ...grpc.CallOption) (*TestUsernameResponse, error)
 	LoginWithPassword(ctx context.Context, in *LoginWithPasswordRequest, opts ...grpc.CallOption) (*LoginWithPasswordResponse, error)
 	LoginWithCode(ctx context.Context, in *LoginWithCodeRequest, opts ...grpc.CallOption) (*LoginWithCodeRsponse, error)
+	DeleteAccounter(ctx context.Context, in *DeleteAccounterRequest, opts ...grpc.CallOption) (*DeleteAccounterResponse, error)
 }
 
 type accountClient struct {
@@ -112,6 +114,15 @@ func (c *accountClient) LoginWithCode(ctx context.Context, in *LoginWithCodeRequ
 	return out, nil
 }
 
+func (c *accountClient) DeleteAccounter(ctx context.Context, in *DeleteAccounterRequest, opts ...grpc.CallOption) (*DeleteAccounterResponse, error) {
+	out := new(DeleteAccounterResponse)
+	err := c.cc.Invoke(ctx, Account_DeleteAccounter_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AccountServer is the server API for Account service.
 // All implementations must embed UnimplementedAccountServer
 // for forward compatibility
@@ -123,6 +134,7 @@ type AccountServer interface {
 	TestUsername(context.Context, *TestUsernameRequest) (*TestUsernameResponse, error)
 	LoginWithPassword(context.Context, *LoginWithPasswordRequest) (*LoginWithPasswordResponse, error)
 	LoginWithCode(context.Context, *LoginWithCodeRequest) (*LoginWithCodeRsponse, error)
+	DeleteAccounter(context.Context, *DeleteAccounterRequest) (*DeleteAccounterResponse, error)
 	mustEmbedUnimplementedAccountServer()
 }
 
@@ -150,6 +162,9 @@ func (UnimplementedAccountServer) LoginWithPassword(context.Context, *LoginWithP
 }
 func (UnimplementedAccountServer) LoginWithCode(context.Context, *LoginWithCodeRequest) (*LoginWithCodeRsponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoginWithCode not implemented")
+}
+func (UnimplementedAccountServer) DeleteAccounter(context.Context, *DeleteAccounterRequest) (*DeleteAccounterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccounter not implemented")
 }
 func (UnimplementedAccountServer) mustEmbedUnimplementedAccountServer() {}
 
@@ -290,6 +305,24 @@ func _Account_LoginWithCode_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Account_DeleteAccounter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteAccounterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountServer).DeleteAccounter(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Account_DeleteAccounter_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountServer).DeleteAccounter(ctx, req.(*DeleteAccounterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Account_ServiceDesc is the grpc.ServiceDesc for Account service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -324,6 +357,10 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoginWithCode",
 			Handler:    _Account_LoginWithCode_Handler,
+		},
+		{
+			MethodName: "DeleteAccounter",
+			Handler:    _Account_DeleteAccounter_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

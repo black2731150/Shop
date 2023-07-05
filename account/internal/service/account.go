@@ -94,3 +94,13 @@ func (a *accountService) LoginWithCode(ctx context.Context, request *v1.LoginWit
 		Token:   token,
 	}, nil
 }
+
+func (a *accountService) DeleteAccounter(ctx context.Context, request *v1.DeleteAccounterRequest) (*v1.DeleteAccounterResponse, error) {
+	err := a.auc.DeleteAccounter(ctx, request.GetEmail())
+	if err != nil {
+		return nil, errors.New(500, "登录失败", err.Error())
+	}
+	return &v1.DeleteAccounterResponse{
+		Success: true,
+	}, nil
+}

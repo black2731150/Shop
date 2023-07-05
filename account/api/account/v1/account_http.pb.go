@@ -19,6 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
+const OperationAccountDeleteAccounter = "/account.v1.Account/DeleteAccounter"
 const OperationAccountLoginWithCode = "/account.v1.Account/LoginWithCode"
 const OperationAccountLoginWithPassword = "/account.v1.Account/LoginWithPassword"
 const OperationAccountRegister = "/account.v1.Account/Register"
@@ -28,6 +29,7 @@ const OperationAccountTestEmailCode = "/account.v1.Account/TestEmailCode"
 const OperationAccountTestUsername = "/account.v1.Account/TestUsername"
 
 type AccountHTTPServer interface {
+	DeleteAccounter(context.Context, *DeleteAccounterRequest) (*DeleteAccounterResponse, error)
 	LoginWithCode(context.Context, *LoginWithCodeRequest) (*LoginWithCodeRsponse, error)
 	LoginWithPassword(context.Context, *LoginWithPasswordRequest) (*LoginWithPasswordResponse, error)
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
@@ -46,6 +48,7 @@ func RegisterAccountHTTPServer(s *http.Server, srv AccountHTTPServer) {
 	r.POST("account/test_username", _Account_TestUsername0_HTTP_Handler(srv))
 	r.POST("account/login_with_password", _Account_LoginWithPassword0_HTTP_Handler(srv))
 	r.POST("account/login_with_code", _Account_LoginWithCode0_HTTP_Handler(srv))
+	r.POST("account/delete_accounter", _Account_DeleteAccounter0_HTTP_Handler(srv))
 }
 
 func _Account_Register0_HTTP_Handler(srv AccountHTTPServer) func(ctx http.Context) error {
@@ -181,7 +184,27 @@ func _Account_LoginWithCode0_HTTP_Handler(srv AccountHTTPServer) func(ctx http.C
 	}
 }
 
+func _Account_DeleteAccounter0_HTTP_Handler(srv AccountHTTPServer) func(ctx http.Context) error {
+	return func(ctx http.Context) error {
+		var in DeleteAccounterRequest
+		if err := ctx.Bind(&in); err != nil {
+			return err
+		}
+		http.SetOperation(ctx, OperationAccountDeleteAccounter)
+		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.DeleteAccounter(ctx, req.(*DeleteAccounterRequest))
+		})
+		out, err := h(ctx, &in)
+		if err != nil {
+			return err
+		}
+		reply := out.(*DeleteAccounterResponse)
+		return ctx.Result(200, reply)
+	}
+}
+
 type AccountHTTPClient interface {
+	DeleteAccounter(ctx context.Context, req *DeleteAccounterRequest, opts ...http.CallOption) (rsp *DeleteAccounterResponse, err error)
 	LoginWithCode(ctx context.Context, req *LoginWithCodeRequest, opts ...http.CallOption) (rsp *LoginWithCodeRsponse, err error)
 	LoginWithPassword(ctx context.Context, req *LoginWithPasswordRequest, opts ...http.CallOption) (rsp *LoginWithPasswordResponse, err error)
 	Register(ctx context.Context, req *RegisterRequest, opts ...http.CallOption) (rsp *RegisterResponse, err error)
@@ -197,6 +220,19 @@ type AccountHTTPClientImpl struct {
 
 func NewAccountHTTPClient(client *http.Client) AccountHTTPClient {
 	return &AccountHTTPClientImpl{client}
+}
+
+func (c *AccountHTTPClientImpl) DeleteAccounter(ctx context.Context, in *DeleteAccounterRequest, opts ...http.CallOption) (*DeleteAccounterResponse, error) {
+	var out DeleteAccounterResponse
+	pattern := "account/delete_accounter"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAccountDeleteAccounter))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, err
 }
 
 func (c *AccountHTTPClientImpl) LoginWithCode(ctx context.Context, in *LoginWithCodeRequest, opts ...http.CallOption) (*LoginWithCodeRsponse, error) {
